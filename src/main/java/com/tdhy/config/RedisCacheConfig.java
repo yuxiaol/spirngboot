@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.tdhy.lock.RedisLock;
+import com.tdhy.lock.TdhyRedisLock;
+
 /** 
  * 二级缓存配置
  * @see RedisCacheConfig 
@@ -41,7 +44,7 @@ public class RedisCacheConfig {
     }
     
     @Autowired
-    RedisTemplate<?, ?> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
     
     @Bean
     public RedisCacheManager cacheManager() {
@@ -53,6 +56,16 @@ public class RedisCacheConfig {
         return redisCacheManager;
     }
     
+    /**
+     * 分布式锁
+     * @see reidsLock 
+     * @thorows 
+     * @return RedisLock
+     */
+	@Bean 
+    public RedisLock reidsLock() {
+    	return  new TdhyRedisLock(redisTemplate);
+    }
     
    
 }
